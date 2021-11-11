@@ -14,7 +14,12 @@
     <form method="POST" class="user-form border border-5 p-4 w-100">
         {% csrf_token %}
         {{ register_form|crispy}} 
-        <button class="btn btn-primary" type="submit">Register</button>
+        <button class="btn btn-primary mt-3" type="submit">Register</button>
+        {% if messages %}
+            {%for message in messages %}
+                <div {% if message.tags %} class="{{message.tags}}" {% endif %}>{{ message }} </div>
+            {% endfor %}
+        {% endif %}
     </form>
     <p class="text-center">If you already have an account, <a href="/login">login</a> instead.</p>
 </div>

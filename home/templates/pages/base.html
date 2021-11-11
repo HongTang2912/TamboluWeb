@@ -61,7 +61,7 @@
 						
 						{% if user.is_authenticated %}
 						<a class="flex-c-m trans-04 p-lr-25">
-							Chào {{user.username}}
+							Chào {{user.first_name}}
 						</a>
 						<a href="/logout" class="flex-c-m trans-04 p-lr-25">
 							Logout
@@ -173,6 +173,26 @@
 				<li>
 					<a href="/cart" class="label1 rs1" data-label1="hot">Giỏ Hàng</a>
 				</li>
+				{% if user.is_authenticated %}
+					
+					<li>
+						<a href="/logout">
+							Logout
+						</a>
+					</li>
+					<li class=>
+						<a class="text-dark text-uppercase flex-c-m trans-04 p-lr-25">
+							Chào {{user.first_name}}
+						</a>
+					</li>
+				{% else %}
+					<li>
+						<a href="/login">
+							Tài Khoản
+
+						</a>
+					</li>
+				{% endif %}
 
 			</ul>
 		</div>
@@ -181,14 +201,14 @@
 		<div class="modal-search-header flex-c-m trans-04 js-hide-modal-search">
 			<div class="container-search-header">
 				<button class="flex-c-m btn-hide-modal-search trans-04 js-hide-modal-search">
-					<img src="images/icons/icon-close2.png" alt="CLOSE">
+					<img src="{% static 'images/icons/icon-close2.png' %}" alt="CLOSE">
 				</button>
 
 				<form class="wrap-search-header flex-w p-l-15">
 					<button class="flex-c-m trans-04">
 						<i class="zmdi zmdi-search"></i>
 					</button>
-					<input class="plh3" type="text" name="search" placeholder="Search...">
+					<input class="plh3" type="text" name="search" placeholder="Search..." id="search">
 				</form>
 			</div>
 		</div>
@@ -210,6 +230,13 @@
 			
 			<div class="header-cart-content flex-w js-pscroll">
 				<ul class="header-cart-wrapitem w-full">
+					
+					{% if cart_stock == 0 %}
+						<li class="text-primary header-cart-item flex-w flex-t m-b-12">
+							Bạn chưa có sản phẩm nào trong giỏ hàng
+						</li>
+					{% endif %}
+							
 					{% for item in cart %}
 						<li class="header-cart-item flex-w flex-t m-b-12">
 							<div class="header-cart-item-img">
@@ -217,14 +244,15 @@
 							</div>
 							
 							<div class="header-cart-item-txt p-t-8">
-								<a href="/product-detail/#" class="header-cart-item-name m-b-18 hov-cl1 trans-04">
-									{{item.product_id}}
+								<a href="/product-detail/{{item.product_id}}" class="header-cart-item-name m-b-18 hov-cl1 trans-04">
+									{{item.product_slug}}
 								</a>
 
 								<span class="header-cart-item-info">
 									<span id = "stock">{{item.count}}</span> x <span id = "price">{{item.price}}</span> VND
 								</span>
 							</div>
+							
 						</li>
 					{% endfor %}
 				</ul>

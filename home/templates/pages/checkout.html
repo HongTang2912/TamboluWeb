@@ -35,7 +35,7 @@
             </div>
             <div class="invoice-date">
                <small>Invoice</small>
-               <div class="date text-inverse m-t-5">August 3,2012</div>
+               <div class="date text-inverse m-t-5">{{order.date}}</div>
                <div class="invoice-detail">
                   #{{order.order_code}}<br>
                   Product
@@ -58,14 +58,14 @@
                   </thead>
                   <tbody>
                      {% for order in cart %}
-                     <tr>
+                     <tr class="bill">
                         <td>
-                           <span class="text-inverse">{{order.product_id}}</span><br>
+                           <span class="text-inverse">{{order.product_slug}}</span><br>
                            <small>{{order.product_attr}}</small>
                         </td>
-                        <td class="text-center">{{order.price}}</td>
-                        <td class="text-center">{{order.count}}</td>
-                        <td class="text-right">{{order.price}}x{{order.count}}</td>
+                        <td class="text-center price">{{order.price}}</td>
+                        <td class="text-center count">{{order.count}}</td>
+                        <td class="text-right subto">{{order.price}}x{{order.count}}</td>
                      </tr>
                      {% endfor %}
                   </tbody>
@@ -78,19 +78,19 @@
                   <div class="invoice-price-row">
                      <div class="sub-price">
                         <small>TẠM TÍNH</small>
-                        <span class="text-inverse">$4,500.00</span>
+                        <span class="text-invoice-price">$4,500.00</span>
                      </div>
                      <div class="sub-price">
                         <i class="fa fa-plus text-muted"></i>
                      </div>
                      <div class="sub-price">
                         <small>PHÍ PHÁT SINH</small>
-                        <span class="text-inverse">$108.00</span>
+                        <span class="text-ship">{{order.shipping_cost}}</span>
                      </div>
                   </div>
                </div>
                <div class="invoice-price-right">
-                  <small>TỔNG CỘNG</small> <span class="f-w-600">$4508.00</span>
+                  <small>TỔNG CỘNG</small> <span class="f-w-600 text-total"></span>
                </div>
             </div>
             <!-- end invoice-price -->

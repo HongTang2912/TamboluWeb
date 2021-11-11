@@ -12,7 +12,9 @@ class Post_attrAdmin(admin.ModelAdmin):
 admin.site.register(Product_attr, Post_attrAdmin)
 
 class CartAdmin(admin.ModelAdmin):
-    list_display = ('id', 'user', 'order', 'product_image', 'product_id', 'price', 'product_attr','count')
+    list_display = ('id', 'user', 'order', 'product_image', 'product_id', 'product_slug', 'price', 'product_attr','count')
+    list_filter = ('order',)
+    search_fields = ['order',]
 admin.site.register(Cart, CartAdmin)
 
 class ShipAdmin(admin.ModelAdmin):
@@ -20,6 +22,6 @@ class ShipAdmin(admin.ModelAdmin):
 admin.site.register(Shipping, ShipAdmin)
 
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ('order_code', 'name', 'address', 'phone_number')
+    list_display = ('order_code', 'name', 'address', 'phone_number', 'shipping_cost', 'date')
 admin.site.register(Order,OrderAdmin)
 

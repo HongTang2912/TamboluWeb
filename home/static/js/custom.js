@@ -1,5 +1,48 @@
+
+function total() {
+    var tot = 0;
+    $(".bill").each(function(i){
+        var price = $(this).find(".price").html();
+        var qu = $(this).find(".count").html();
+        $(this).find(".subto").html((parseInt(price) * parseInt(qu)).toLocaleString('it-IT', {style : 'currency', currency : 'VND'}));
+        tot += parseInt(price) * parseInt(qu);
+    });
+    var ship = parseInt($(".text-ship").html());
+    $(".text-ship").html(ship.toLocaleString('it-IT', {style : 'currency', currency : 'VND'}));
+    $(".text-invoice-price").html(tot.toLocaleString('it-IT', {style : 'currency', currency : 'VND'}));
+    $(".text-total").html((tot+ship).toLocaleString('it-IT', {style : 'currency', currency : 'VND'}));
+
+    const price = [];
+    const qu = [];
+    var sum = 0;
+    $(".table_row").each(function(i){
+        price[i] = $(this).find(".column-3").attr("value");
+        qu[i] = $(this).find("#p-quantity").attr("value");
+        sum += (parseInt(price[i]) * parseInt(qu[i]));
+    });
+    $(".subtotal").html(sum.toLocaleString('it-IT', {style : 'currency', currency : 'VND'}));
+
+    const price_cart = [];
+    const qu_cart = [];
+    var sumCart = 0;
+    $(".header-cart-item-info").each(function(i) {
+        price_cart[i] = $(this).find("#price").html();
+        qu_cart[i] = $(this).find("#stock").html();
+        sumCart += (parseInt(price_cart[i]) * parseInt(qu_cart[i]));
+    });
+    $(".sub-total").html(sumCart.toLocaleString('it-IT', {style : 'currency', currency : 'VND'})); 
+}
+
 $(document).ready(function() {
 
+    
+
+    $("#search").on("keyup", function() {
+        var value = $(this).toLowerCase();
+        $(".isotope-item div").filter(function() {
+            $(this).toggle($(this).text().toLowerCase().indexof(value) > -1);
+        });
+    });
     var content;
    
     var ship; 
@@ -29,17 +72,9 @@ $(document).ready(function() {
         
         
     });
-    const price = [];
-    const qu = [];
-    var sum = 0;
-    $(".table_row").each(function(i){
-        price[i] = $(this).find(".column-3").attr("value");
-        qu[i] = $(this).find("#p-quantity").attr("value");
-        sum += (parseInt(price[i]) * parseInt(qu[i]));
-    });
 
-    $(".subtotal").html(sum.toLocaleString('it-IT', {style : 'currency', currency : 'VND'}));
     
+    total();
     
     $(".table_row").find("#edit").click(function(){
         $(".result").val($(this).closest("td").attr("value"));
@@ -49,15 +84,7 @@ $(document).ready(function() {
     //if (edit() == 1) console.log($(this).find("#edit").attr("value"));
  
     //------------------------------------
-    const price_cart = [];
-    const qu_cart = [];
-    var sumCart = 0;
-    $(".header-cart-item-info").each(function(i) {
-        price_cart[i] = $(this).find("#price").html();
-        qu_cart[i] = $(this).find("#stock").html();
-        sumCart += (parseInt(price_cart[i]) * parseInt(qu_cart[i]));
-    });
-    $(".sub-total").html(sumCart.toLocaleString('it-IT', {style : 'currency', currency : 'VND'})); 
+  
     
     var orderRandom;
     var orderCode = "";

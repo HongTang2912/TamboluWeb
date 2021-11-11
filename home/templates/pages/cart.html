@@ -16,33 +16,42 @@
 									<th class="column-1">Sản phẩm</th>
 									<th class="column-2"></th>
 									<th class="column-3">Giá</th>
-									<th class="column-4">Số lượng</th>
-									
-									<th class="column-5">Chỉnh sửa</th>
+									<th class="column-3">Số lượng</th>
+									<th class="column-3">loai</th>
+									<th class="column-3">Chỉnh sửa</th>
 								</tr>
-                                
+                                {% if user.is_authenticated %}
+									{% if cart_stock == 0 %}
+									<tr class="table_row">
+										<td class="column-1 notify-text" colspan="5">
+											Hãy đến <a href = "/product">gian hàng</a> để lựa chọn sản phẩm bạn yêu thích
+										</td>
+									</tr>
+									{% endif %}
+								{% else %}
+										<tr class="table_row">
+											<td class="column-1 notify-text" colspan="5">
+												Bạn hãy <a href = "/login">đăng nhập</a> để cập nhật tính năng giỏ hàng
+											</td>
+										</tr>
+								{% endif %}
+								
                                 {% for item in cart %}
+									
 									<tr class="table_row">
 										<td class="column-1">
 											<div class="how-itemcart1">
 												<img src="{{item.product_image}}" alt="IMG">
 											</div>
 										</td>
-										<td class="column-2">{{item.product_id}}</td>
+										<td class="column-2">{{item.product_slug}}</td>
 										
 										<td class="column-3" id="p-price" value="{{item.price}}">{{item.price}} đ</td>
 										
-										<td class="column-4 text-center text-nowrap">
-											
-												
-
+										<td class="column-2 text-center">
 											<input id="p-quantity" class="mtext-104 cl3 txt-center num-product" type="number" name="num-product" value="{{item.count}}" disabled>
-
-											
-											{{item.product_attr}}
-												
-											
 										</td>
+										<td class="column-2">{{item.product_attr}}</td>
 										<td class="text-center" value="{{item.id}}">
 											
 											{% csrf_token %}
@@ -110,8 +119,7 @@
 
 									<div class="rs1-select2 rs2-select2 bor8 bg0 m-b-12 m-t-9">
 										<select class="js-select2" name="city">
-											<option >Hồ Chí Minh</option>
-											
+											<option>Hồ Chí Minh</option>
 										</select>
 										<div class="dropDownSelect2"></div>
 									</div>
@@ -119,7 +127,7 @@
 									<div class="rs1-select2 rs2-select2 bor8 bg0 m-b-12 m-t-9">
 										<select class="js-select2" name="district">
 											{% for ship in shipping %}
-												<option class="district" value="{{ship.shipping_cost}}">{{ship.district}}: <span style="display: none !important;">{{ship.shipping_cost}}</span></option>
+												<option class="district" value="{{ship.district}}">{{ship.district}}: {{ship.shipping_cost}}</option>
 											{% endfor %}
 										</select>
 										<div class="dropDownSelect2"></div>

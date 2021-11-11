@@ -4,6 +4,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib.auth.models import User
 from .forms import CartForm
+from datetime import date
 # Create your views here.
 def index(request):
     data = {'prod': Product.objects.all(),
@@ -23,10 +24,11 @@ def product_d(request, pk):
         user = request.POST.get('user')
         p_image = request.POST.get('product_image')
         product_id =  Product.objects.get(title=request.POST.get('title')).id
+        product_slug = Product.objects.get(title=request.POST.get('title')).title
         price = request.POST.get('price')
         product_attr =  request.POST.get('product_attr')
         count = request.POST.get('stock')
-        cart = Cart(None, user, p_image, product_id, price, product_attr, count)
+        cart = Cart(None, user, p_image, product_id, product_slug, price, product_attr, count)
         cart.save()
         
     return render(request, 'pages/product-detail.html', data)
@@ -49,10 +51,13 @@ def cart_display(request):
             name = request.POST.get('last-name')+" "+request.POST.get('first-name')
             address = request.POST.get('address')+" "+request.POST.get('phuong')+" "+request.POST.get('district')+" "+"Thành phố Hồ Chí Minh"
             sdt = request.POST.get('phone')
-            print(name)
+            shipping = Shipping.objects.get(district=request.POST.get('district')).shipping_cost
+            print(res)
             print(address)
             print(sdt)
-            order = Order(None, res, name, address, sdt)
+            print(shipping)
+            print(date.today())
+            order = Order(None, res, name, address, sdt, shipping, date.today())
             cart = Cart.objects.filter(user=request.user)
             
             for i in cart:

@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from datetime import date
 # Create your models here.
 class Product(models.Model):
     product_image = models.CharField(null=False, unique=True, max_length=100)
@@ -19,7 +20,7 @@ class Product(models.Model):
     )
 
     def __str__(self):
-        return self.title
+        return str(self.id)
     
 class Product_attr(models.Model):
     product_id = models.ForeignKey(Product, null=False,  on_delete=models.CASCADE)
@@ -39,6 +40,7 @@ class Cart(models.Model):
     user = models.CharField(null = False, max_length=100)
     product_image = models.CharField(null = False, max_length=100)
     product_id = models.ForeignKey(Product, null=False,  on_delete=models.CASCADE)
+    product_slug = models.CharField(null=True, max_length=100)
     price = models.DecimalField(max_digits=10, decimal_places=0, default = 0, null = False)
     product_attr = models.TextField(max_length=500, null=True)
     count = models.IntegerField(default=1, null= False)
@@ -83,6 +85,8 @@ class Order(models.Model):
     name = models.CharField(max_length=100, null=False)
     address = models.CharField(max_length=1000, null=False)
     phone_number = models.DecimalField(max_digits=14, decimal_places=0, null = False)
+    shipping_cost = models.CharField(max_length=100, null=False)
+    date = models.DateField(default=date.today())
 
     def __str__(self):
         return self.order_code

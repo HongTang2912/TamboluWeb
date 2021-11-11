@@ -1,3 +1,9 @@
-form.user-form input {
+.login-registerForm {
+    font-family: 'Nunito', sans-serif !important;
+    font-weight: 700;
+    text-align: center;
     padding: 10px;
+}
+.user-form {
+    max-width: 900px;
 }
