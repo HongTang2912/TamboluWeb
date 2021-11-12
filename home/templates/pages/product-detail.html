@@ -3,7 +3,7 @@
 {% block title %} {{title}} {% endblock %}
 
 {% block content %}
-   
+<form action="" method="POST">
 	<!-- Product Detail -->
 	<section class="sec-product-detail bg0 p-t-65 p-b-60">
 		<div class="container">
@@ -103,18 +103,18 @@
 									</div>
 									
 										
-									<form action="" method="POST">
-										{% csrf_token %}
-										<input type="hidden" value="{{details.product_image}}" name="product_image">
-										<input type="hidden" value="{{user.username}}" name="user">
-										<input type="hidden" value="{{details.title}}" name="title">
-										<input type="hidden" value="{{details.price}}" name="price">
-										<input type="hidden" id="attribute" value="" name=product_attr>
-										<input type="hidden" id="num" value="1" name="stock">
-										<button class="add-to-cart-button flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04 js-addcart-detail" type="submit">
-											Add to cart
-										</button>
-									</form>
+									
+									{% csrf_token %}
+									<input type="hidden" value="{{details.product_image}}" name="product_image">
+									<input type="hidden" value="{{user.username}}" name="user">
+									<input type="hidden" value="{{details.title}}" name="title">
+									<input type="hidden" value="{{details.price}}" name="price">
+									<input type="text" id="attribute" value="" name="product_attr">
+									<input type="text" id="num" value="1" name="stock">
+									<button class="add-to-cart-button flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04 js-addcart-detail" type="submit">
+										Add to cart
+									</button>
+									
 
 									
 								</div>
@@ -911,4 +911,5 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 			</div>
 		</div>
 	</div>
+</form>
 {% endblock %}

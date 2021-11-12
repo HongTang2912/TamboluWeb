@@ -52,12 +52,8 @@ def cart_display(request):
             address = request.POST.get('address')+" "+request.POST.get('phuong')+" "+request.POST.get('district')+" "+"Thành phố Hồ Chí Minh"
             sdt = request.POST.get('phone')
             shipping = Shipping.objects.get(district=request.POST.get('district')).shipping_cost
-            print(res)
-            print(address)
-            print(sdt)
-            print(shipping)
-            print(date.today())
             order = Order(None, res, name, address, sdt, shipping, date.today())
+            
             cart = Cart.objects.filter(user=request.user)
             
             for i in cart:

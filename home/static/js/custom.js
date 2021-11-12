@@ -1,5 +1,7 @@
 
-function total() {
+
+$(document).ready(function() {
+
     var tot = 0;
     $(".bill").each(function(i){
         var price = $(this).find(".price").html();
@@ -31,20 +33,11 @@ function total() {
         sumCart += (parseInt(price_cart[i]) * parseInt(qu_cart[i]));
     });
     $(".sub-total").html(sumCart.toLocaleString('it-IT', {style : 'currency', currency : 'VND'})); 
-}
-
-$(document).ready(function() {
-
     
-
-    $("#search").on("keyup", function() {
-        var value = $(this).toLowerCase();
-        $(".isotope-item div").filter(function() {
-            $(this).toggle($(this).text().toLowerCase().indexof(value) > -1);
-        });
+    $(".table_row").find("#edit").click(function(){
+        $(".result").val($(this).closest("td").attr("value"));
     });
-    var content;
-   
+    
     var ship; 
     $(document).click(function() {
         $(".select2-selection__rendered").each(function(i) {
@@ -57,7 +50,7 @@ $(document).ready(function() {
         });
         
     }); 
-    
+    var content;
     $(document).click(function() {
         
         content = "";
@@ -73,14 +66,6 @@ $(document).ready(function() {
         
     });
 
-    
-    total();
-    
-    $(".table_row").find("#edit").click(function(){
-        $(".result").val($(this).closest("td").attr("value"));
-    });
-    
-    
     //if (edit() == 1) console.log($(this).find("#edit").attr("value"));
  
     //------------------------------------
