@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils import timezone
 from datetime import date
 # Create your models here.
 class Product(models.Model):
@@ -18,7 +19,9 @@ class Product(models.Model):
         choices= category_type,
         null=True
     )
-
+    body = models.TextField(blank=True)
+    description = models.TextField(blank=True)
+    addition_info = models.TextField(blank=True)
     def __str__(self):
         return str(self.id)
     
@@ -38,10 +41,7 @@ class Product_attr(models.Model):
 class Cart(models.Model):
     id = models.AutoField(primary_key=True, auto_created=True)
     user = models.CharField(null = False, max_length=100)
-    product_image = models.CharField(null = False, max_length=100)
     product_id = models.ForeignKey(Product, null=False,  on_delete=models.CASCADE)
-    product_slug = models.CharField(null=True, max_length=100)
-    price = models.DecimalField(max_digits=10, decimal_places=0, default = 0, null = False)
     product_attr = models.TextField(max_length=500, null=True)
     count = models.IntegerField(default=1, null= False)
     order = models.CharField(null = True, max_length=8)
@@ -82,6 +82,7 @@ class Shipping(models.Model):
 
 class Order(models.Model):
     order_code = models.CharField(null = False, max_length=8, unique=True)
+    user = models.CharField(max_length=150, null=False)
     name = models.CharField(max_length=100, null=False)
     address = models.CharField(max_length=1000, null=False)
     phone_number = models.DecimalField(max_digits=14, decimal_places=0, null = False)
@@ -90,3 +91,7 @@ class Order(models.Model):
 
     def __str__(self):
         return self.order_code
+
+class XImages(models.Model):
+    main_product = models.ForeignKey(Product, null=False,  on_delete=models.CASCADE)
+    extensive_img = models.CharField(null=False, unique=True, max_length=100)

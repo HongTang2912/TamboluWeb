@@ -12,7 +12,7 @@ class Post_attrAdmin(admin.ModelAdmin):
 admin.site.register(Product_attr, Post_attrAdmin)
 
 class CartAdmin(admin.ModelAdmin):
-    list_display = ('id', 'user', 'order', 'product_image', 'product_id', 'product_slug', 'price', 'product_attr','count')
+    list_display = ('id', 'user', 'order', 'product_id', 'product_attr','count')
     list_filter = ('order',)
     search_fields = ['order',]
 admin.site.register(Cart, CartAdmin)
@@ -22,6 +22,12 @@ class ShipAdmin(admin.ModelAdmin):
 admin.site.register(Shipping, ShipAdmin)
 
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ('order_code', 'name', 'address', 'phone_number', 'shipping_cost', 'date')
+    list_display = ('order_code', 'user', 'name', 'address', 'phone_number', 'shipping_cost', 'date')
 admin.site.register(Order,OrderAdmin)
+
+class XAdmin(admin.ModelAdmin):
+    list_display = ('main_product', 'extensive_img')
+    list_filter = ('main_product', )
+    search_fields = [ 'extensive_img',]
+admin.site.register(XImages, XAdmin)
 

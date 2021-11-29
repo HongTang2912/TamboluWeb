@@ -1,0 +1,120 @@
+{% extends "pages/base.html" %}
+
+{% block title %} Tambolu - Fashion for everyone {% endblock %}
+
+{% block content %}
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+<div class="container mt-5 pt-5">
+   <div class="col-md-12">
+      <div class="invoice">
+         <!-- begin invoice-company -->
+         <div class="invoice-company text-inverse f-w-600">
+            <span class="pull-right hidden-print">
+            <a href="javascript:;" class="btn btn-sm btn-white m-b-10 p-l-5"><i class="fa fa-file t-plus-1 text-danger fa-fw fa-lg"></i> Export as PDF</a>
+            <a href="javascript:;" onclick="window.print()" class="btn btn-sm btn-white m-b-10 p-l-5"><i class="fa fa-print t-plus-1 fa-fw fa-lg"></i> Print</a>
+            </span>
+            Tambolu Shop
+         </div>
+         <!-- end invoice-company -->
+         <!-- begin invoice-header -->
+         <div class="invoice-header">
+            <div class="invoice-from">
+               <small>from</small>
+               <address class="m-t-5 m-b-5">
+                  <strong class="text-inverse">Tambolu Shop</strong><br>
+                  Số điện thoại: 0938151701 <br>
+               </address>
+            </div>
+            <div class="invoice-to">
+               <small>to</small>
+               <address class="m-t-5 m-b-5">
+                  <strong class="text-inverse">Người Nhận</strong><br>
+                  {{order.address}}<br>
+                  Phone: (+84){{order.phone_number}}<br>
+               </address>
+            </div>
+            <div class="invoice-date">
+               <small>Invoice</small>
+               <div class="date text-inverse m-t-5">{{order.date}}</div>
+               <div class="invoice-detail">
+                  #{{order.order_code}}<br>
+                  Product
+               </div>
+            </div>
+         </div>
+         <!-- end invoice-header -->
+         <!-- begin invoice-content -->
+         <div class="invoice-content">
+            <!-- begin table-responsive -->
+            <div class="table-responsive">
+               <table class="table table-invoice">
+                  <thead>
+                     <tr>
+                        <th>SẢN PHẨM</th>
+                        <th class="text-center" width="10%">GIÁ</th>
+                        <th class="text-center" width="10%">SỐ LƯỢNG</th>
+                        <th class="text-right" width="20%">TỔNG</th>
+                     </tr>
+                  </thead>
+                  <tbody>
+                     {% for order in cart %}
+                     <tr class="bill">
+                        <td>
+                           <span class="text-inverse">{{order.product_id.title}}</span><br>
+                           <small>{{order.product_id.product_attr}}</small>
+                        </td>
+                        <td class="text-center price">{{order.product_id.price}}</td>
+                        <td class="text-center count">{{order.count}}</td>
+                        <td class="text-right subto">{{order.product_id.price}}x{{order.count}}</td>
+                     </tr>
+                     {% endfor %}
+                  </tbody>
+               </table>
+            </div>
+            <!-- end table-responsive -->
+            <!-- begin invoice-price -->
+            <div class="invoice-price">
+               <div class="invoice-price-left">
+                  <div class="invoice-price-row">
+                     <div class="sub-price">
+                        <small>TẠM TÍNH</small>
+                        <span class="text-invoice-price">$4,500.00</span>
+                     </div>
+                     <div class="sub-price">
+                        <i class="fa fa-plus text-muted"></i>
+                     </div>
+                     <div class="sub-price">
+                        <small>PHÍ PHÁT SINH</small>
+                        <span class="text-ship">{{order.shipping_cost}}</span>
+                     </div>
+                  </div>
+               </div>
+               <div class="invoice-price-right">
+                  <small>TỔNG CỘNG</small> <span class="f-w-600 text-total"></span>
+               </div>
+            </div>
+            <!-- end invoice-price -->
+         </div>
+         <!-- end invoice-content -->
+         <!-- begin invoice-note -->
+         <div class="invoice-note">
+            * Sản phẩm sẽ được giao trong vòng 7 ngày sau khi đặt hàng 
+            <br>
+            * Nếu có thắc mắc xin quý khách liên hệ email: hongtang240@gmail.com
+         </div>
+         <!-- end invoice-note -->
+         <!-- begin invoice-footer -->
+         <div class="invoice-footer">
+            <p class="text-center m-b-5 f-w-600">
+               CẢM ƠN QUÝ KHÁCH!
+            </p>
+            <p class="text-center">
+               <span class="m-r-10"><i class="fa fa-fw fa-lg fa-globe"></i> hongtang240@gmail.com</span>
+               <span class="m-r-10"><i class="fa fa-fw fa-lg fa-phone-volume"></i> 0938151701</span>
+            </p>
+         </div>
+         <!-- end invoice-footer -->
+      </div>
+   </div>
+</div>
+{% endblock %}

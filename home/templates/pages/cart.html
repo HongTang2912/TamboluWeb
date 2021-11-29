@@ -4,14 +4,17 @@
 {% block title %} Tambolu - Fashion for everyone {% endblock %}
 
 {% block content %}
+	{% load static %}
 	<!-- Shoping Cart -->
-	<form class="bg0 p-t-75 p-b-85" method="POST">
+	<form class="cart_form bg0 p-t-75 p-b-85" method="POST">
+		{% csrf_token %}
 		<div class="container">
 			<div class="row">
 				<div class="col-lg-10 col-xl-7 m-lr-auto m-b-50">
 					<div class="m-l-25 m-r--38 m-lr-0-xl">
 						<div class="wrap-table-shopping-cart">
 							<table class="table-shopping-cart">
+								<thead>
 								<tr class="table_head">
 									<th class="column-1">Sản phẩm</th>
 									<th class="column-2"></th>
@@ -29,40 +32,48 @@
 									</tr>
 									{% endif %}
 								{% else %}
-										<tr class="table_row">
-											<td class="column-1 notify-text" colspan="5">
-												Bạn hãy <a href = "/login">đăng nhập</a> để cập nhật tính năng giỏ hàng
-											</td>
-										</tr>
-								{% endif %}
-								
-                                {% for item in cart %}
-									
 									<tr class="table_row">
+										<td class="column-1 notify-text" colspan="5">
+											Bạn hãy <a href = "/login">đăng nhập</a> để cập nhật tính năng giỏ hàng
+										</td>
+									</tr>
+								{% endif %}
+								</thead>
+								<tbody>
+									{% for item in cart %}
+									<tr class="table_row {{item.id}}">
 										<td class="column-1">
 											<div class="how-itemcart1">
-												<img src="{{item.product_image}}" alt="IMG">
+												<img src="{{item.product_id.product_image}} " alt="IMG">
 											</div>
 										</td>
-										<td class="column-2">{{item.product_slug}}</td>
+										<td class="column-2 title" value="{{item.product_id.title}}">  {{item.product_id.title}}</td>
 										
-										<td class="column-3" id="p-price" value="{{item.price}}">{{item.price}} đ</td>
+										<td class="column-3 price" id="p-price" value="{{item.product_id.price}}"> {{item.product_id.price}} đ</td>
 										
-										<td class="column-2 text-center">
-											<input id="p-quantity" class="mtext-104 cl3 txt-center num-product" type="number" name="num-product" value="{{item.count}}" disabled>
+										<td class="column-4">
+											<div class="wrap-num-product flex-w m-l-auto m-r-0">
+												<div class="btn-num-product-down cl8 hov-btn3 trans-04 flex-c-m">
+													<i class="fs-16 zmdi zmdi-minus"></i>
+												</div>
+	
+												<input class="mtext-104 cl3 txt-center num-product" type="number" name="num-product" id="p-quantity" value="{{item.count}}">
+	
+												<div class="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m">
+													<i class="fs-16 zmdi zmdi-plus"></i>
+												</div>
+											</div>
 										</td>
-										<td class="column-2">{{item.product_attr}}</td>
+										<td class="column-2 product_attr" value="{{item.product_attr}}">  {{item.product_attr}} </td>
 										<td class="text-center" value="{{item.id}}">
 											
-											{% csrf_token %}
-											<input class="result d-none" name="result" value>
 											<button type="submit" name="submit" id="edit"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
 											
 										</td>
 										
-									</tr> 
-                                {% endfor %}
-								
+									</tr>
+									{% endfor %}
+								</tbody>
 							</table>
 							
 							
@@ -74,6 +85,10 @@
 									
 								<div class="flex-c-m stext-101 cl2 size-118 bg8 bor13 hov-btn3 p-lr-15 trans-04 pointer m-tb-5">
 									Áp dụng mã
+								</div>
+
+								<div class="flex-c-m stext-101 cl2 size-119 bg8 bor13 hov-btn3 p-lr-15 trans-04 pointer m-tb-10 update-button">
+									Cập nhật giỏ hàng
 								</div>
 							</div>
 						</div>
@@ -95,7 +110,6 @@
 
 							<div class="size-209">
 								<span class="mtext-110 cl2 subtotal">
-									
 								</span>
 							</div>
 						</div>
@@ -108,38 +122,64 @@
 							</div>
 
 							<div class="size-209 p-r-18 p-r-0-sm w-full-ssm">
-								<span class="mtext-110 cl2 ship_cost">
-									
-								</span>
+								<span class="mtext-110 cl2 ship_cost"></span>
+							</div>
+						</div>
+
+						<div class="p-t-15">
+							<span class="stext-112 cl8">
+								Khu vực giao hàng
+							</span>
+
+							<div class="rs1-select2 rs2-select2 bor8 bg0 m-b-12 m-t-9">
+								<select class="js-select2" name="city">
+									<option>Hồ Chí Minh</option>
+								</select>
+								<div class="dropDownSelect2"></div>
+							</div>
+
+							<div class="rs1-select2 rs2-select2 bor8 bg0 m-b-12 m-t-9">
+								<select class="js-select2" name="district">
+									{% for ship in shipping %}
+										<option class="district" value="{{ship.district}}">{{ship.district}}: {{ship.shipping_cost}}</option>
+									{% endfor %}
+								</select>
+								<div class="dropDownSelect2"></div>
+							</div>
+							<div class="bor8 bg0 m-b-12">
+								<input class="stext-111 cl8 plh3 size-111 p-lr-15 phuong" type="text" name="phuong" placeholder="Phường / Xã">
+							</div>
+							<div class="bor8 bg0 m-b-12">
+								<input class="stext-111 cl8 plh3 size-111 p-lr-15 address" type="text" name="address" placeholder="Địa chỉ">
+							</div>
+
+							<span class="stext-112 cl8">
+								Thông tin giao hàng
+							</span>
+							<div class="bor8 bg0 m-b-12">
+								<input class="stext-111 cl8 plh3 size-111 p-lr-15 address" type="text" name="last-name" placeholder="Họ">
+							</div>
+							<div class="bor8 bg0 m-b-12">
+								<input class="stext-111 cl8 plh3 size-111 p-lr-15 address" type="text" name="first-name" placeholder="Tên đệm - Tên">
+							</div>
+							<div class="bor8 bg0 m-b-12">
+								<input class="stext-111 cl8 plh3 size-111 p-lr-15 address" type="text" name="phone" placeholder="Điện thoại liên lạc">
+							</div>
+
+							<span class="stext-112 cl8">
+								Phương thức thanh toán
+							</span>
+							<div class="payment">
 								
-								<div class="p-t-15">
-									<span class="stext-112 cl8">
-										Khu vực giao hàng
-									</span>
-
-									<div class="rs1-select2 rs2-select2 bor8 bg0 m-b-12 m-t-9">
-										<select class="js-select2" name="city">
-											<option>Hồ Chí Minh</option>
-										</select>
-										<div class="dropDownSelect2"></div>
-									</div>
-
-									<div class="rs1-select2 rs2-select2 bor8 bg0 m-b-12 m-t-9">
-										<select class="js-select2" name="district">
-											{% for ship in shipping %}
-												<option class="district" value="{{ship.district}}">{{ship.district}}: {{ship.shipping_cost}}</option>
-											{% endfor %}
-										</select>
-										<div class="dropDownSelect2"></div>
-									</div>
-									<div class="bor8 bg0 m-b-12">
-										<input class="stext-111 cl8 plh3 size-111 p-lr-15 phuong" type="text" name="phuong" placeholder="Phường / Xã">
-									</div>
-									<div class="bor8 bg0 m-b-12">
-										<input class="stext-111 cl8 plh3 size-111 p-lr-15 address" type="text" name="address" placeholder="Địa chỉ">
-									</div>
-										
-								</div>
+								<label>
+									<input type="radio" name="test" value="shipping" checked>
+									<img src="{% static 'images/icons/shipped.png' %}" class="payment-block">
+								</label>
+								<label>
+									<input type="radio" name="test" value="momo">
+									<img src="{% static 'images/icons/MoMo_Logo.png' %}" class="payment-block">
+								</label>
+							
 							</div>
 						</div>
 
@@ -148,6 +188,8 @@
 								<span class="mtext-101 cl2">
 									Tổng tiền phải trả:
 								</span>
+								
+								
 							</div>
 
 							<div class="size-209 p-t-1">
@@ -155,50 +197,30 @@
 									
 								</span>
 							</div>
+							
 						</div>
 						
-					</div>
-				</div>
-			</div>
-			<div class="container-sm bg-secondary p-3 rounded">
-				<div class="form bg-light rounded border-top border-3 border-primary p-5">
-					<div class="title  m-3">
-						<h1>Đăng ký thông tin</h1>
-					</div>
-					<hr>
-						<div class="row mb-3">
-							<input type="hidden" class="form-control" name="MDH" value="">
-							<div class="col-md-1 col-2">
-								<label for="name" class="form-label info">Họ</label>
-							</div>
-						   	<div class="col-md-5 col-10">
-								<input type="text" class="form-control" name="last-name">
-							</div>
-						
-							<div class="col-md-1 col-2">
-								<label for="name" class="form-label info">Tên</label>
-							</div>
-						   <div class="col-md-5 col-10">
-								<input type="text" class="form-control" name="first-name">
-							</div>
-						</div>
-						<div class="row mb-3">
-							<div class="col-md-4 col-3">
-								<label for="telephoneNumber" class="form-label info">Điện thoại liên lạc</label>
-							</div>
-						   	<div class="col-md-8 col-9">
-								<input type="tel" class="form-control" name="phone" >
-							</div>
-						</div>
-						{% csrf_token %}
 						<button name="checkout" type="submit" class="checkout-button flex-c-m stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-15 trans-04 pointer">
 							Thanh toán
 						</button>
-					<hr>
-				</div> 
-			   
+					</div>
+				</div>
 			</div>
+			
 		</div>
 	</form>
-	
-{%endblock%}
+	<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+			<h3 id="myModalLabel">Modal header</h3>
+		</div>
+		<div class="modal-body">
+			<p>One fine body…</p>
+		</div>
+		<div class="modal-footer">
+			<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+			<button class="btn btn-primary">Save changes</button>
+		</div>
+	</div>
+{% endblock %}
+

@@ -119,3 +119,28 @@ a, th {
     background: #fff;
     border-color: #d9dfe3;
 }
+/* HIDE RADIO */
+[type=radio] { 
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+/* IMAGE STYLES */
+[type=radio] + img {
+    cursor: pointer;
+}
+
+/* CHECKED STYLES */
+[type=radio]:checked + img {
+    outline: 2px solid rgb(10, 10, 10);
+}
+.payment {
+    display: flex;
+}
+img.payment-block{
+    width: 50px;
+    height: 50px;
+    margin: 10px;
+}

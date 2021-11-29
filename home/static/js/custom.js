@@ -2,6 +2,15 @@
 
 $(document).ready(function() {
 
+    var total;
+    $("table").each(function(){
+      total = 0;
+      $(this).find(".records").each(function(e){
+        total += parseInt($(this).find("#amount").html()) * parseInt($(this).find("#price").html()) ;
+      });
+      $(this).find("#total-table").html(total.toLocaleString('it-IT', {style : 'currency', currency : 'VND'}));
+    });
+
     var tot = 0;
     $(".bill").each(function(i){
         var price = $(this).find(".price").html();
@@ -34,10 +43,6 @@ $(document).ready(function() {
     });
     $(".sub-total").html(sumCart.toLocaleString('it-IT', {style : 'currency', currency : 'VND'})); 
     
-    $(".table_row").find("#edit").click(function(){
-        $(".result").val($(this).closest("td").attr("value"));
-    });
-    
     var ship; 
     $(document).click(function() {
         $(".select2-selection__rendered").each(function(i) {
@@ -50,36 +55,60 @@ $(document).ready(function() {
         });
         
     }); 
-    var content;
-    $(document).click(function() {
-        
-        content = "";
-        
-        $("span[title]").each(function(index) {
-            if ($(this).attr("title") != "Choose an option")
-                content+=($(this).attr("title") + " ");
+    
+    // Delete Django Ajax Call
+    $("tr").find("#edit").each(function() {
+        $(this).click(function(e){
+            e.preventDefault();
+            
+            var id = $(this).closest("td").attr("value");
+            $(this).closest("tr").remove();
+            $.ajax({
+                url: 'delete',
+                data: {
+                    'id': id,
+                },
+                success: function(data) {
+                    if (data.deleted){
+                        console.log(data.id);
+                    }
+                },
+            
+            });
         });
+    })
+   
+    $(".update-button").click(function(e) {
+        e.preventDefault();
         
-        document.getElementById("attribute").value = content;
-        document.getElementById("num").value = document.getElementById("num-product").value;
-        
-        
+        var id = [];
+        var title = [];
+        var count = [];
+        var price = [];
+        var attr = [];
+        $("tr").each(function(e) {  
+            id[e] = $(this).find("td.text-center").closest("td").attr("value");
+            title[e] = $(this).find("td.title").closest("td").attr("value");
+            price[e] = $(this).find("td.price").closest("td").attr("value");
+            attr[e] = $(this).find("td.product_attr").closest("td").attr("value");
+            count[e] = $(this).find("input").val();
+        });
+    
+        $.ajax({
+            url: 'cart-data',
+            data: {
+                'id': JSON.stringify(id),
+                'title': JSON.stringify(title),
+                'price': JSON.stringify(price),
+                'attr': JSON.stringify(attr),
+                'count': JSON.stringify(count),
+            },
+            dataType: 'json',
+            success: function (data) {
+                $('.js-addcart-detail').modal('show');
+            }
+        })
     });
 
-    //if (edit() == 1) console.log($(this).find("#edit").attr("value"));
- 
-    //------------------------------------
-  
-    
-    var orderRandom;
-    var orderCode = "";
-    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-
-    for (var i = 0; i < 8; i++) {
-        orderCode += possible.charAt(Math.floor(Math.random() * possible.length))
-    }
-    $('[name="MDH"]').val(orderCode);
-    
-        
 });
 
