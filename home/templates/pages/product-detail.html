@@ -5,7 +5,7 @@
 {% block content %}
 
 	<!-- Product Detail -->
-	<section class="sec-product-detail bg0 p-t-65 p-b-60 mt-3">
+	<section class="sec-product-detail bg0 p-t-90 p-b-60 mt-3">
 		<div class="container">
 			<div class="row">
 				<div class="col-md-6 col-lg-7 p-b-30">
@@ -65,16 +65,20 @@
 
 								<div class="size-204 respon6-next">
 									<div class="rs1-select2 bor8 bg0">
-										<select class="js-select2" name="attr" value={{j.attribute}}>
+										<select class="js-select2" name="attr">
 											{% for j in attr %}
-												
-												<option >{{j.attribute}}</option>
-												
+												{% if j.stock <= 0 %}
+													<option value="{{j.attribute}}">{{j.attribute}}: Hết hàng</option>
+												{% else %}
+													<option value="{{j.attribute}}">{{j.attribute}}: {{j.stock}}</option>
+												{% endif %}
 											{%endfor%}
 										</select>
+										
 										<div class="dropDownSelect2"></div>
 									</div>
 								</div>
+								<div {% if message.tags %} class="{{message.tags}}" {% endif %}>{{ message }} </div>
 							</div>
 							
 
@@ -89,10 +93,12 @@
 										<input id="num-product" class="mtext-104 cl3 txt-center num-product" type="number" name="num-product" min="1" max="10" value="1">
 
 										<div class="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m">
+											
 											<i class="fs-16 zmdi zmdi-plus"></i>
+											
 										</div>
 									</div>
-								
+									
 									{% csrf_token %}
 									<button class="add-to-cart-button flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04 js-addcart-detail" type="submit" name="add-to-cart">
 										Add to cart
@@ -258,7 +264,7 @@
 			</span>
 
 			<span class="stext-107 cl6 p-lr-25">
-				Categories: Jacket, Men
+				Categories: {{details.type_product}}
 			</span>
 		</div>
 	</section>
@@ -276,7 +282,7 @@
 			<!-- Slide2 -->
 			<div class="wrap-slick2">
 				<div class="slick2">
-					{% for item in prod %}
+					{% for item in related_prod %}
 					<div class="item-slick2 p-l-15 p-r-15 p-t-15 p-b-15">
 						<!-- Block2 -->
 						<div class="block2">

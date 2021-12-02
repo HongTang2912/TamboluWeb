@@ -3,7 +3,7 @@ from .models import *
 # Register your models here.
 
 class PostAdmin(admin.ModelAdmin):
-    list_display = ('id', 'product_image','title', 'price', 'type_product')
+    list_display = ('id', 'product_image','title', 'price', 'type_product', 'views')
 admin.site.register(Product, PostAdmin)
 
 class Post_attrAdmin(admin.ModelAdmin):

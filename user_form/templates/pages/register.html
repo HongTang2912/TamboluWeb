@@ -1,27 +1,121 @@
 {% extends "pages/base.html" %}
 
-{% block title %} Sign up  {% endblock %}
+{% block title %} Sign up {% endblock %}
 
-{% block content %} 
+{% block content %}
 
-{% load crispy_forms_tags %}       
+{% load crispy_forms_tags %}
 
+<style>
+    .container.py-5 {
+        margin-top: 50px;
+    }
 
+    input {
+        border: 1px solid #e9ecef !important;
+        width: 95% !important;
+    }
 
-<!--Register--> 
+    input:hover,
+    input:focus {
+        border: 1px solid black !important;
+    }
+
+    .user-form.border.border-5.p-4.w-100 {
+        width: 50% !important;
+        margin-left: 25%;
+        border: 2.5px solid #e9ecef !important;
+    }
+
+    .container.py-5>h1 {
+        text-align: center !important;
+        margin-bottom: 10px;
+    }
+
+    .btn.btn-primary.mt-3:hover {
+        background-color: #E9ECEF;
+        color: black;
+        border-color: transparent;
+    }
+
+    .btn.btn-primary.mt-3 {
+        width: 20%;
+    }
+
+    #hint_id_password1,
+    #hint_id_password2,
+    #hint_id_username {
+        color: red;
+        display: none;
+    }
+</style>
+
+<!--Register-->
 <div class="container py-5">
     <h1 class="login-registerForm">Register</h1>
     <form method="POST" class="user-form border border-5 p-4 w-100">
         {% csrf_token %}
-        {{ register_form|crispy}} 
+        {{ register_form|crispy}}
         <button class="btn btn-primary mt-3" type="submit">Register</button>
         {% if messages %}
-            {%for message in messages %}
-                <div {% if message.tags %} class="{{message.tags}}" {% endif %}>{{ message }} </div>
-            {% endfor %}
+        {%for message in messages %}
+        <div {% if message.tags %} class="{{message.tags}}" {% endif %}>{{ message }} </div>
+        {% endfor %}
         {% endif %}
     </form>
     <p class="text-center">If you already have an account, <a href="/login">login</a> instead.</p>
 </div>
+
+<script>
+    var username = document.querySelector('#div_id_username');
+    username.style.padding = '1rem 0rem';
+    username.childNodes[1].childNodes[1].innerHTML = ':';
+
+    var email = document.querySelector('#div_id_email');
+    email.style.padding = '1rem 0rem';
+    email.childNodes[1].childNodes[1].innerHTML = ':';
+
+    var password1 = document.querySelector('#div_id_password1');
+    password1.style.padding = '1rem 0rem';
+    password1.childNodes[1].childNodes[1].innerHTML = ':';
+
+    var password2 = document.querySelector('#div_id_password2');
+    password2.style.padding = '1rem 0rem';
+    password2.childNodes[1].childNodes[1].innerHTML = ':';
+
+    var firstName = document.querySelector('#div_id_first_name');
+    firstName.style.padding = '1rem 0rem';
+    firstName.childNodes[1].childNodes[1].innerHTML = ':';
+
+    var lastName = document.querySelector('#div_id_last_name');
+    lastName.style.padding = '1rem 0rem';
+    lastName.childNodes[1].childNodes[1].innerHTML = ':';
+
+    document.querySelector('#hint_id_username').innerHTML = `Must have 1 - 150 characters include letters, numbers, @ , . , + , - , _ `;
+    document.querySelector('#div_id_password1 ul').style.display = 'none';
+    document.querySelector('#hint_id_password1').innerHTML = 'Your password must contain at least 8 characters (include letters and numbers) and not be too similar to your information';
+    
+    
+    document.querySelector('#div_id_username input').addEventListener('focusin', (event) => {
+        document.querySelector('#hint_id_username').style.display = 'block';
+    });
+    document.querySelector('#div_id_username input').addEventListener('focusout', (event) => {
+        document.querySelector('#hint_id_username').style.display = 'none';
+    });
+
+    document.querySelector('#div_id_password1 input').addEventListener('focusin', (event) => {
+        document.querySelector('#hint_id_password1').style.display = 'block';
+    });
+    document.querySelector('#div_id_password1 input').addEventListener('focusout', (event) => {
+        document.querySelector('#hint_id_password1').style.display = 'none';
+    });
+
+    document.querySelector('#div_id_password2 input').addEventListener('focusin', (event) => {
+        document.querySelector('#hint_id_password2').style.display = 'block';
+    });
+    document.querySelector('#div_id_password2 input').addEventListener('focusout', (event) => {
+        document.querySelector('#hint_id_password2').style.display = 'none';
+    });
+</script>
 
 {% endblock %}

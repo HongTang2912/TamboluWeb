@@ -99,10 +99,11 @@
 							 <li>
 								<a href="/cart">Giỏ Hàng</a>
 							</li>
-
+							{% if user.is_authenticated %}
 							<li>
 								<a href="/checkout/{{user.username}}">Quản lý đơn hàng</a>
 							</li>
+							{% endif %}
 							<!--  class="label1" data-label1="hot" -->
 						</ul>
 					</div>	
@@ -176,14 +177,13 @@
 				</li>
 
 				<li>
-					<a href="/cart" class="label1 rs1">Giỏ Hàng</a>
+					<a href="/cart">Giỏ Hàng</a>
 				</li>
-
-				<li>
-					<a href="/checkout/{{user.username}}">Cửa Hàng</a>
-				</li>
+				
 				{% if user.is_authenticated %}
-					
+					<li>
+						<a href="/checkout/{{user.username}}">Quản lý đơn hàng</a>
+					</li>
 					<li>
 						<a href="/logout">
 							Logout
@@ -258,7 +258,7 @@
 								</a>
 
 								<span class="header-cart-item-info">
-									<span id = "stock">{{item.count}}</span> x <span id = "price">{{item.product_id.price}}</span> VND
+									<span id="stock">{{item.count}}</span> x <span id = "price">{{item.product_id.price}}</span> VND
 								</span>
 							</div>
 							
@@ -403,23 +403,23 @@
 			<div class="p-t-40">
 				<div class="flex-c-m flex-w p-b-18">
 					<a href="#" class="m-all-1">
-						<img src="images/icons/icon-pay-01.png" alt="ICON-PAY">
+						<img src="{% static 'images/icons/icon-pay-01.png' %}" alt="ICON-PAY">
 					</a>
 
 					<a href="#" class="m-all-1">
-						<img src="images/icons/icon-pay-02.png" alt="ICON-PAY">
+						<img src="{% static 'images/icons/icon-pay-02.png' %}" alt="ICON-PAY">
 					</a>
 
 					<a href="#" class="m-all-1">
-						<img src="images/icons/icon-pay-03.png" alt="ICON-PAY">
+						<img src="{% static 'images/icons/icon-pay-03.png' %}" alt="ICON-PAY">
 					</a>
 
 					<a href="#" class="m-all-1">
-						<img src="images/icons/icon-pay-04.png" alt="ICON-PAY">
+						<img src="{% static 'images/icons/icon-pay-04.png' %}" alt="ICON-PAY">
 					</a>
 
 					<a href="#" class="m-all-1">
-						<img src="images/icons/icon-pay-05.png" alt="ICON-PAY">
+						<img src="{% static 'images/icons/icon-pay-05.png' %}" alt="ICON-PAY">
 					</a>
 				</div>
 
@@ -470,5 +470,6 @@
 <!--===============================================================================================-->
 	<script src="{% static 'js/main.js' %}"></script>
 	<script src="{% static 'js/custom.js' %}"></script>
+	<script src="https://www.paypal.com/sdk/js?client-id=Ad3muLutNKNza9bfUIn84A-aGDAm4aQ97-LUtSnR7kcqP70FhlFtcukDXiBXcTlQnv4LmTdbbAiODJgw&currency=USD&disable-funding=credit"></script>
 </body>
 </html>

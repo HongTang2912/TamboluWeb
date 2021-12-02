@@ -1,7 +1,14 @@
 from django.urls import path
-
-
+from home.sitemaps import *
+from django.contrib.sitemaps.views import sitemap
 from . import views
+
+sitemaps = {
+    'static': StaticViewSitemap,
+    'product': ProductSitemap,
+    'invoice': InvoiceSitemap,
+    'checkout': CheckoutSitemap
+}
 
 app_name = 'home'
 urlpatterns = [
@@ -14,4 +21,7 @@ urlpatterns = [
     path('delete', views.delete, name = 'delete'),
     path('cart-data', views.CartData, name = 'cart-data'),
     path('search', views.Search, name = 'search'),
+    path('sitemap.xml', sitemap, {'sitemaps': sitemaps}),
+    path('payment', views.Payment, name = 'payment'),
+    # path('wishlist', views.WishList, name = 'wishlist'),
 ]

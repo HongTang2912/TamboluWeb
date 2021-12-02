@@ -50,7 +50,8 @@ footer {
     <h4 class="font-family: Arial, Helvetica, sans-serif;" value="{{order.order_code}}" name="order">Mã đơn hàng: #{{order.order_code}}</h4>
     <div><small>Tên người đặt hàng: {{order.name}}</small></div>
     <div><small>Ngày đặt hàng: {{order.date}}</small></div>
-    <table class="payment-table-{{order.order_code}}">
+    <div><small>Phương thức thanh toán: {{order.method}}</small></div>
+    <table class="payment-table-{{order.order_code}}"> 
      
         <tr>
           <th class="item-header">Tên sản phẩm</th>
@@ -58,7 +59,7 @@ footer {
           <th class="item-header">Số lượng</th>
           <th class="item-header">Đơn giá</th>
         </tr> 
-        {% for item in cart %}
+        {% for item in cart2 %}
         {% if item.order == order.order_code %}
         <tr class="row-highlight records">
           <td>{{item.product_id.title}}</td>

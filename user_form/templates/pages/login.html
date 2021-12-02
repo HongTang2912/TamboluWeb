@@ -1,29 +1,91 @@
 {% extends "pages/base.html" %}
 
-{% block title %} Login  {% endblock %}
+{% block title %} Login {% endblock %}
 
-{% block content %}      
+{% block content %}
 
 {% load crispy_forms_tags %}
 
-<!--Login--> 
-<div class="container py-5">
+<style>
+  .login-registerForm {
+    text-align: center;
+    margin-bottom: 10px;
+  }
+
+  .container.py-5 {
+    margin-top: 50px;
+  }
+
+  .textinput.textInput {
+    border: 1px solid #e9ecef;
+    width: 100%;
+  }
+
+  .textinput.textInput:hover {
+    border: 1px solid black;
+  }
+
+  .user-form.border.border-5.p-4.w-100 {
+    width: 50% !important;
+    margin-left: 25%;
+    border: 2.5px solid #e9ecef !important;
+  }
+
+  .container.py-5>h1 {
+    text-align: center !important;
+    margin-bottom: 10px;
+  }
+
+  .btn.btn-primary.mt-3:hover {
+    background-color: #E9ECEF;
+    color: black;
+    border-color: transparent;
+  }
+
+  .btn.btn-primary.mt-3 {
+    width: 30%;
+    margin-bottom: 0.2rem;
+  }
+
+  .controls input {
+    margin: 0.5rem 0;
+  }
+
+  .loginContainer {
+    justify-content: space-between;
+    align-items: baseline;
+    display: flex;
+  }
+</style>
+
+<!--Login-->
+<div class="container pt-5 mt-5 mb-3">
   <h1 class="login-registerForm">Login</h1>
- 
-  
+
+
   <form method="POST" class="user-form border border-5 p-4 w-100">
-    {% csrf_token %}  
-    {{ login_form|crispy }} 
-   
-    <button class="btn btn-primary mt-3" type="submit">Login</button>
+    {% csrf_token %}
+    {{ login_form|crispy }}
+
+    <div class='loginContainer'>
+      <button class="btn btn-primary mt-3" type="submit">Login</button>
+      <p><a href="{% url 'user_form:reset_password' %}">Forgot your password?</a></p>
+    </div>
     {% if messages %}
-      {%for message in messages %}
-        <div {% if message.tags %} class="{{message.tags}}" {% endif %}>{{ message }} </div>
-      {% endfor %}
+    {%for message in messages %}
+    <div {% if message.tags %} class="{{message.tags}}" {% endif %}>{{ message }} </div>
+    {% endfor %}
     {% endif %}
   </form>
-   
+
   <p class="text-center">Don't have an account? <a href="/register">Create an account</a>.</p>
+
 </div>
+
+<script>
+  var asteriskField = document.querySelectorAll('.asteriskField');
+  asteriskField[0].innerHTML = ':';
+  asteriskField[1].innerHTML = ':';
+</script>
 
 {% endblock %}

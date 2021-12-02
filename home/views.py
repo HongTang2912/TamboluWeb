@@ -7,6 +7,7 @@ from django.contrib.auth.models import User
 from datetime import date
 from .forms import CartForm
 import random, string, functools, json
+from django.contrib import messages
 
 
 # Create your views here.
@@ -17,24 +18,29 @@ def index(request):
     return render(request, 'pages/index.html', data)
 
 def product_d(request, pk):
-    
-    attr = Product_attr.objects.values('attribute').filter(product_id=pk).distinct()
+    view = Product.objects.get(id=pk)
+    view.views += 1
+    view.save()
+    attr = Product_attr.objects.values('attribute', "stock").filter(product_id=pk).distinct()
+
     data = {'details': Product.objects.get(id=pk),
-            'prod': Product.objects.all(),
+            'related_prod': Product.objects.all().order_by('-views')[:10],
             'attr': attr,
-            'stock': Product_attr.objects.values('attribute', 'stock').filter(product_id=pk).distinct(),
             'cart_stock': Cart.objects.filter(user=request.user, order=None).count(),
             'cart': Cart.objects.select_related('product_id').filter(user = request.user, order=None),
-            'ximages': XImages.objects.filter(main_product=pk)}
-    
+            'ximages': XImages.objects.filter(main_product=pk),
+            }
 
     if request.method == 'POST' and request.user.is_authenticated:
         user = request.user
         product_id = pk
-        product_attr =  request.POST.get('attr')
+        product_attr = request.POST.get('attr')
         count = request.POST.get('num-product')
         cart = Cart(None, user, product_id, product_attr, count)
+
+        
         cart.save()
+        
     return render(request, 'pages/product-detail.html', data)
     
 def product(request):
@@ -55,7 +61,8 @@ def cart_display(request):
             address = request.POST.get('address')+" "+request.POST.get('phuong')+" "+request.POST.get('district')+" "+"Thành phố Hồ Chí Minh"
             sdt = request.POST.get('phone')
             shipping = Shipping.objects.get(district=request.POST.get('district')).shipping_cost
-            order = Order(None, res, user, name, address, sdt, shipping, date.today())
+            method = request.POST.get('method')
+            order = Order(None, res, user, name, address, sdt, shipping, date.today(), method)
             
             cart = Cart.objects.filter(user=request.user)
             
@@ -70,15 +77,16 @@ def cart_display(request):
 
 def invoice(request, order):
     data = {'cart_stock': Cart.objects.filter(user=request.user, order=None).count(),
-            'cart': Cart.objects.select_related('product_id').filter(user = request.user, order=order),
+            'cart': Cart.objects.select_related('product_id').filter(order=order),
             'order': Order.objects.get(order_code=order)}
     
     return render(request, 'pages/invoice.html', data)
 
 def check_out(request, user):
     data = {'cart_stock': Cart.objects.filter(user=user, order=None).count(),
-            'cart': Cart.objects.select_related('product_id').filter(user=user),
-            'order_code': Order.objects.filter(user=user),}
+            'cart': Cart.objects.select_related('product_id').filter(user=user, order=None),
+            'cart2': Cart.objects.select_related('product_id').filter(user=user),
+            'order_code': Order.objects.filter(user=user).order_by('-id'),}
     
     return render(request, 'pages/checkout.html', data)
 
@@ -104,8 +112,8 @@ def CartData(request):
 
     for i in range(1, (stock+1)):
         instance = Cart.objects.get(id = id[i])
+        # print(id[i] + ": " + count[i])
         instance.count = count[i]
-        print(id[i] + ": " + count[i])
         instance.save()
 
     return JsonResponse({'update': 'success'})
@@ -119,6 +127,31 @@ def Search(request):
     return render(request, 'pages/search.html', data)
 
 
+
+def Payment(request):
+    res = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(8))
+    while(Cart.objects.filter(order=res).count() == 1):
+        res = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(8))
+    user = request.user
+    name = json.dumps(request.GET.get('info'), ensure_ascii=False).encode('utf8').decode().replace("[", "").replace("]", "").replace("\"", "").replace("\\", "")
+    address = json.dumps(request.GET.get('address'), ensure_ascii=False).encode('utf8').decode().replace("[", "").replace("]", "").replace("\"", "").replace("\\", "")
+    sdt = json.dumps(request.GET.get('phone'), ensure_ascii=False).encode('utf8').decode().replace("[", "").replace("]", "").replace("\"", "").replace("\\", "")
+    ship = json.dumps(request.GET.get('ship'), ensure_ascii=False).encode('utf8').decode().replace("[", "").replace("]", "").replace("\"", "").replace("\\", "")
+    shipping = str(Shipping.objects.get(district=ship).shipping_cost)
+    order = Order(None, res, user, name, address, sdt, shipping, date.today(), "paypal")
+    cart = Cart.objects.filter(user=request.user)
+            
+    for i in cart:
+        if i.order == None:
+            i.order = res
+            i.save()
+    if Cart.objects.filter(order=res).count() != 0:
+        order.save()
+    
+    return JsonResponse({'isPaid': True})
+
+# def WishList(request):
+#     return HttpResponse("WISH_LIST")
 
 
 
