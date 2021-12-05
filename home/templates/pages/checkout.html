@@ -3,6 +3,7 @@
 {% block title %} Tambolu - Fashion for everyone {% endblock %}
 
 {% block content %}
+{% load static %}
 <style>
   [class^="payment-table"]{
     font-family: arial, sans-serif;
@@ -45,12 +46,17 @@ footer {
   <div class="container pt-5 mt-5 mb-3">
     <h1 style="font-family: Arial, Helvetica, sans-serif;">Lịch sử mua hàng</h1>
   </div>
+  <img src="{% static 'images/momo-qrcode.png' %}" alt="">
+  
   {% for order in order_code %}
   <div class="container mb-5">
-    <h4 class="font-family: Arial, Helvetica, sans-serif;" value="{{order.order_code}}" name="order">Mã đơn hàng: #{{order.order_code}}</h4>
+    <h4 class="font-family: Arial, Helvetica, sans-serif;" value="{{order.order_code}}" name="order">Mã đơn hàng: <a href="/invoice/{{order.order_code}}">#{{order.order_code}}</a></h4>
     <div><small>Tên người đặt hàng: {{order.name}}</small></div>
     <div><small>Ngày đặt hàng: {{order.date}}</small></div>
     <div><small>Phương thức thanh toán: {{order.method}}</small></div>
+    {% if order.method == 'momo' %} 
+    <div><a style="float: left" href="/momo-payment/{{order.order_code}}">Quét mã QR-Code thanh toán momo</a></div>
+    {% endif %}
     <table class="payment-table-{{order.order_code}}"> 
      
         <tr>
@@ -78,9 +84,10 @@ footer {
                 <td colspan="3">Tổng tiền: <span id="total-table"></span></td>
             </tr>
         </tfoot>
-       
+        
     </table>
   </div>
 
 {% endfor %}
+  
 {% endblock %}

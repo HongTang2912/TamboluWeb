@@ -1,0 +1,24 @@
+{% extends "pages/base.html" %}
+
+{% block title %} Tambolu - Fashion for everyone {% endblock %}
+
+{% block content %}
+
+{% load static %}
+<style>
+    .col-md-12 {
+        flex-direction: column;
+        align-items: center;
+    }
+</style>
+<div class="container mt-5 pt-5">
+    <div class="col-md-12 d-flex">
+        <h3>Quét mã MoMo để thanh toán</h3>
+        <div>
+            <img src="{% static 'momo.png'%}" alt="momo-qr">
+        </div>
+        <strong>Tang Chan Hong</strong>
+        <strong class="momo-amount">{{order.total}}</strong>
+    </div>
+</div>
+{% endblock %}

@@ -23,5 +23,6 @@ urlpatterns = [
     path('search', views.Search, name = 'search'),
     path('sitemap.xml', sitemap, {'sitemaps': sitemaps}),
     path('payment', views.Payment, name = 'payment'),
+    path('momo-payment/<str:order>/', views.Momo, name="momo")
     # path('wishlist', views.WishList, name = 'wishlist'),
 ]

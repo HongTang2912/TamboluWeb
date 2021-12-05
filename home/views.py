@@ -6,7 +6,7 @@ from django.http import JsonResponse, HttpResponse
 from django.contrib.auth.models import User
 from datetime import date
 from .forms import CartForm
-import random, string, functools, json
+import random, string, functools, json, qrcode, os
 from django.contrib import messages
 
 
@@ -37,8 +37,6 @@ def product_d(request, pk):
         product_attr = request.POST.get('attr')
         count = request.POST.get('num-product')
         cart = Cart(None, user, product_id, product_attr, count)
-
-        
         cart.save()
         
     return render(request, 'pages/product-detail.html', data)
@@ -65,24 +63,30 @@ def cart_display(request):
             order = Order(None, res, user, name, address, sdt, shipping, date.today(), method)
             
             cart = Cart.objects.filter(user=request.user)
-            
+            subtotal = 0
             for i in cart:
                 if i.order == None:
                     i.order = res
+                    subtotal += int(i.product_id.price) * int(i.count)
                     i.save()
             if Cart.objects.filter(order=res).count() != 0:
+                total = subtotal + int(order.shipping_cost)
+                order.total = str(total)
                 order.save()
             
     return render(request, 'pages/cart.html', data)
 
 def invoice(request, order):
+    
     data = {'cart_stock': Cart.objects.filter(user=request.user, order=None).count(),
             'cart': Cart.objects.select_related('product_id').filter(order=order),
-            'order': Order.objects.get(order_code=order)}
+            'order': Order.objects.get(order_code=order),
+            }
     
     return render(request, 'pages/invoice.html', data)
 
 def check_out(request, user):
+   
     data = {'cart_stock': Cart.objects.filter(user=user, order=None).count(),
             'cart': Cart.objects.select_related('product_id').filter(user=user, order=None),
             'cart2': Cart.objects.select_related('product_id').filter(user=user),
@@ -150,6 +154,20 @@ def Payment(request):
     
     return JsonResponse({'isPaid': True})
 
+def Momo(request, order):
+    d = '2|99|0938151701|Tang Chan Hong|hongtang240@gmail.com|0|0|' + Order.objects.get(order_code=order).total
+    qr = qrcode.make(d)
+
+    # get os directory 
+    path = os.getcwd()
+    # save at floder static
+    qr.save(path+"/home/static/momo.png")
+
+    data = {'order': Order.objects.get(order_code=order),
+            'cart_stock': Cart.objects.filter(user=request.user, order=None).count(),
+            'cart': Cart.objects.select_related('product_id').filter(user = request.user, order=None)
+    }
+    return render(request, 'pages/momo_payment.html', data)
 # def WishList(request):
 #     return HttpResponse("WISH_LIST")
 

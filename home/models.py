@@ -99,7 +99,7 @@ class Order(models.Model):
     shipping_cost = models.CharField(max_length=100, null=False)
     date = models.DateField(default=date.today())
     method = models.CharField(max_length=100, null=False, default="regular")
-
+    total = models.CharField(max_length=100, null=False, default="0")
     def __str__(self):
         return self.order_code
     def get_absolute_url(self):

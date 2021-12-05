@@ -94,6 +94,19 @@ $(document).ready(function() {
         });
     });
 
+    var ship; 
+    $(document).click(function() {
+        $(".select2-selection__rendered").each(function(i) {
+            if (i == 1) {
+                ship = parseInt($(this).attr("title").slice($(this).attr("title").length - 6, $(this).attr("title").length));
+                $(".ship_cost").html(ship.toLocaleString('it-IT', {style : 'currency', currency : 'VND'}));
+                $(".total").html((ship+sum).toLocaleString('it-IT', {style : 'currency', currency : 'VND'}));
+            }
+        });
+    });  
+    $(".total").html((ship+sum).toLocaleString('it-IT', {style : 'currency', currency : 'VND'}));
+    $(".total").val(ship+sum);
+
     $(".update-button").click(function(e) {
         
         e.preventDefault();
@@ -153,7 +166,7 @@ $(document).ready(function() {
             return actions.order.create({
                 purchase_units: [{
                     amount: {
-                        value: (parseFloat($(".total").val())/22694.9185).toFixed(2)
+                        value: (parseFloat($(".total").html().replace(".", "").replace("&nbsp;VND",""))/22694.9185).toFixed(2)
                     }
                 }]
             });
@@ -172,16 +185,6 @@ $(document).ready(function() {
         }
     }).render('#paypal-button-container');
 
-    var ship; 
-    $(document).click(function() {
-        $(".select2-selection__rendered").each(function(i) {
-            if (i == 1) {
-                ship = parseInt($(this).attr("title").slice($(this).attr("title").length - 6, $(this).attr("title").length));
-                $(".ship_cost").html(ship.toLocaleString('it-IT', {style : 'currency', currency : 'VND'}));
-                $(".total").html((ship+sum).toLocaleString('it-IT', {style : 'currency', currency : 'VND'}));
-            }
-        });
-    }); 
-    $(".total").val(ship+sum);
+    $(".momo-amount").html(parseInt($(".momo-amount").html()).toLocaleString('it-IT', {style : 'currency', currency : 'VND'}));
 });
 
