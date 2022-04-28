@@ -1,3 +1,4 @@
+
 function getDataAjax() {
     
     var address = $("[name='address']").val() + " " + $("[name='phuong']").val() + " " + $("[name='district']").val() + " " + $("[name='city']").val();
@@ -151,9 +152,9 @@ $(document).ready(function() {
     });
 
     // Render the PayPal button into #paypal-button-container
-    
+
     paypal.Buttons({
-        
+    
         style: {
             color:  'blue',
             shape:  'rect',
@@ -166,7 +167,7 @@ $(document).ready(function() {
             return actions.order.create({
                 purchase_units: [{
                     amount: {
-                        value: (parseFloat($(".total").html().replace(".", "").replace("&nbsp;VND",""))/22694.9185).toFixed(2)
+                        value: (parseFloat($(".total").html().replaceAll(".", "").replace("&nbsp;VND",""))/22694.9185).toFixed(2)
                     }
                 }]
             });

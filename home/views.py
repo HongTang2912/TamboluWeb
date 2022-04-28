@@ -8,6 +8,8 @@ from datetime import date
 from .forms import CartForm
 import random, string, functools, json, qrcode, os
 from django.contrib import messages
+from pathlib import Path
+
 
 
 # Create your views here.
@@ -158,11 +160,11 @@ def Momo(request, order):
     d = '2|99|0938151701|Tang Chan Hong|hongtang240@gmail.com|0|0|' + Order.objects.get(order_code=order).total
     qr = qrcode.make(d)
 
-    # get os directory 
-    path = os.getcwd()
+    # Build paths inside the project like this: BASE_DIR / 'subdir'.
+    BASE_DIR = Path(__file__).resolve().parent.parent
     # save at floder static
-    qr.save(path+"/home/static/momo.png")
-
+    qr.save(str(BASE_DIR)+"/home/static/momo.png")
+    print(str(BASE_DIR)+"/home/static/momo.png")
     data = {'order': Order.objects.get(order_code=order),
             'cart_stock': Cart.objects.filter(user=request.user, order=None).count(),
             'cart': Cart.objects.select_related('product_id').filter(user = request.user, order=None)
